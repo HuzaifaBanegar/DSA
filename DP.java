@@ -68,19 +68,28 @@ public class DP {
         return dp[n - 1];
     }
 
-    public static int longestIncreasingSubsequence(int[] A) {
-        int n = A.length;
-        int[] dp = new int[n];
-        dp[0] = 1;
-        for (int i = 1; i < dp.length; i++) {
-            if (A[i] > A[i - 1]) {
-                dp[i] = dp[i - 1] + 1;
-            } else {
-                dp[i] = dp[i - 1];
-            }
+    public static int fun(int[] arr, int i , int prev, int[][] dp){
+        if(i==arr.length){
+            return 0;
+        }
+        if(dp[i][prev+1]!= -1){
+            return dp[i][prev+1];
+        }
+        int take =0;
+        if(prev == -1 || arr[i]>arr[prev]){
+            take = 1  + fun(arr,i +1, i,dp);
+        }
+        int notTake = fun(arr, i+1, prev,dp);
+        return dp[i][prev+1]=Math.max(take, notTake);
+    }
+
+    public static int longestIncreasingSubsequence(int[] nums) {
+        int[][] dp = new int[nums.length][nums.length + 2];
+        for(int[] arr : dp){
+            Arrays.fill(arr,-1);
         }
 
-        return dp[n - 1];
+        return fun(nums,0,-1,dp);
     }
 
     public static int getDigits(int[][] dp, int digit, int sum) {
